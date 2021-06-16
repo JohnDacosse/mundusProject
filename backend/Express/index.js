@@ -41,11 +41,11 @@ app.get('/favorites/:id', function (req, res) {
     let usr_id = req.params.id;
     let regex = new RegExp("^[0-9]*$");
     if (!regex.test(req.params.id)) {
-        id_usr = 0;
+        usr_id = 0;
     }
     
     // Get all favorites of the user
-    connection.query(`select * from favorites where usr_id=?`, [id_usr], function (err, rows) {
+    connection.query(`select * from favorites where usr_id=?`, [usr_id], function (err, rows) {
     if (err) throw err;
 
     res.send(rows);
@@ -101,13 +101,15 @@ app.post('/login/:email?/:password', (req, res) => {
             if (rows[0].ctn !== 0 && result) {
                 console.log(req.sessionID);
                 if (req.session.authentificated) {
-                    res.json(req.session);
+                    //res.json(req.session);
+                    res.sendStatus(200);
                 } else {
                     req.session.authentificated = true;
                     req.session.user = {
                         email, password
                     };
-                    res.json(req.session);
+                    //res.json(req.session);
+                    res.sendStatus(200);
                 }
             } else {
                 res.json({ msg: 'Mauvais email ou mot de passe.' });
